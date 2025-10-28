@@ -1,0 +1,39 @@
+# Finite State Automaton to recognize strings ending with 'ab'
+
+def fsa_ends_with_ab(string):
+    # Define states
+    state = 0  # start state
+
+    # Transition through each character in the string
+    for char in string:
+        if state == 0:
+            if char == 'a':
+                state = 1
+            else:
+                state = 0
+        elif state == 1:
+            if char == 'a':
+                state = 1
+            elif char == 'b':
+                state = 2
+            else:
+                state = 0
+        elif state == 2:
+            if char == 'a':
+                state = 1
+            else:
+                state = 0
+
+    # Accepting state is 2 (i.e., string ends with 'ab')
+    if state == 2:
+        return True
+    else:
+        return False
+
+
+# Test the automaton
+test_strings = ["ab", "aab", "baba", "cab", "hello", "abab"]
+
+for s in test_strings:
+    result = fsa_ends_with_ab(s)
+    print(f"{s:10} --> {'Accepted' if result else 'Rejected'}")
