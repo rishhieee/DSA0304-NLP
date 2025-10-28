@@ -1,0 +1,41 @@
+# Finite-State Machine for Morphological Parsing
+# Task: Generate plural forms of English nouns
+
+def pluralize(noun):
+    """Simple FSM-based function to generate plural forms of English nouns."""
+
+    # Define states
+    state = "START"
+
+    # Final (accepting) state
+    final_state = "PLURAL"
+
+    # Define pluralization rules based on the last few letters
+    if noun.endswith(('s', 'x', 'z', 'ch', 'sh')):
+        state = "ADD_ES"
+    elif noun.endswith('y') and noun[-2].lower() not in 'aeiou':
+        state = "REPLACE_Y"
+    else:
+        state = "ADD_S"
+
+    # Transition to the final state with rule-based transformation
+    if state == "ADD_ES":
+        plural = noun + "es"
+    elif state == "REPLACE_Y":
+        plural = noun[:-1] + "ies"
+    elif state == "ADD_S":
+        plural = noun + "s"
+    else:
+        plural = noun  # fallback
+
+    return plural, final_state
+
+
+# --- Test the FSM ---
+nouns = ["cat", "bus", "box", "baby", "boy", "church", "fox", "dog", "wish", "toy"]
+
+print("Singular\t→\tPlural")
+print("-" * 30)
+for n in nouns:
+    plural_form, state = pluralize(n)
+    print(f"{n:10}\t→\t{plural_form}")
