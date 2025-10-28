@@ -1,0 +1,30 @@
+import random
+from collections import defaultdict
+
+class NGramModel:
+    def __init__(self, n):
+        self.n = n
+        self.ngrams = defaultdict(list)
+
+    def train(self, text):
+        tokens = text.split()
+        for i in range(len(tokens) - self.n + 1):
+            ngram = tuple(tokens[i:i + self.n - 1])
+            next_word = tokens[i + self.n - 1]
+            self.ngrams[ngram].append(next_word)
+
+    def generate(self, length, seed=None):
+        if seed is None:
+            seed = random.choice(list(self.ngrams.keys()))
+        output = list(seed)
+        for _ in range(length):
+            next_word = random.choice(self.ngrams[tuple(output[-(self.n - 1):])])
+            output.append(next_word)
+        return ' '.join(output)
+
+# Example usage
+text = "the quick brown fox jumps over the lazy dog"
+bigram_model = NGramModel(n=2)
+bigram_model.train(text)
+generated_text = bigram_model.generate(length=5, seed=("the",))
+print(generated_text)
