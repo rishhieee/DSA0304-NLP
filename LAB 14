@@ -1,0 +1,52 @@
+# Program: Check Subject–Verb Agreement using a Context-Free Grammar
+# Requires: nltk  →  pip install nltk
+
+import nltk
+from nltk import CFG
+
+#  Define a grammar that encodes subject–verb agreement
+grammar = CFG.fromstring("""
+S -> NP_SG VP_SG | NP_PL VP_PL
+
+NP_SG -> Det_SG N_SG | 'he' | 'she' | 'it'
+NP_PL -> Det_PL N_PL | 'they' | 'we'
+
+VP_SG -> V_SG NP_SG | V_SG NP_PL | V_SG
+VP_PL -> V_PL NP_SG | V_PL NP_PL | V_PL
+
+Det_SG -> 'a' | 'this'
+Det_PL -> 'some' | 'these'
+
+N_SG -> 'boy' | 'girl' | 'dog' | 'apple'
+N_PL -> 'boys' | 'girls' | 'dogs' | 'apples'
+
+V_SG -> 'eats' | 'runs' | 'barks'
+V_PL -> 'eat' | 'run' | 'bark'
+""")
+
+#  Create the parser
+parser = nltk.ChartParser(grammar)
+
+#  Function to check agreement
+def check_agreement(sentence):
+    words = sentence.lower().split()
+    try:
+        parses = list(parser.parse(words))
+        if parses:
+            print(f"✅ Sentence is grammatically correct: {sentence}")
+            for tree in parses:
+                print(tree)
+                tree.pretty_print()
+        else:
+            print(f"❌ Sentence violates agreement rules: {sentence}")
+    except ValueError:
+        print(f"⚠️ Unknown word(s) in sentence: {sentence}")
+
+
+# Test sentences
+check_agreement("he eats")
+check_agreement("they eat")
+check_agreement("he eat")    # wrong: singular subject + plural verb
+check_agreement("they eats") # wrong: plural subject + singular verb
+check_agreement("the boys eat apples")
+check_agreement("this dog bark")
