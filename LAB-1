@@ -1,0 +1,23 @@
+import re
+
+text = "My email is example123@gmail.com and my phone number is +91-9876543210."
+
+match_email = re.search(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b', text)
+if match_email:
+    print("Email found:", match_email.group())
+else:
+    print("No email found.")
+
+phone_numbers = re.findall(r'\+?\d{1,3}[-\s]?\d{10}', text)
+print("Phone numbers found:", phone_numbers)
+
+if re.match(r'My', text):
+    print("The text starts with 'My'")
+else:
+    print("The text does not start with 'My'")
+
+censored_text = re.sub(r'\d', '*', text)
+print("Censored text:", censored_text)
+
+split_text = re.split(r'[\s,.!]+', text)
+print("Split words:", split_text)
