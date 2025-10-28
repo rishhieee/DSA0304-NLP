@@ -1,0 +1,29 @@
+# Program: Generate a Parse Tree using Context-Free Grammar
+# Requires: nltk  →  pip install nltk
+
+import nltk
+from nltk import CFG
+
+#  Define a Context-Free Grammar
+grammar = CFG.fromstring("""
+S -> NP VP
+NP -> Det N | Det N PP | 'I'
+VP -> V NP | VP PP
+PP -> P NP
+Det -> 'a' | 'the'
+N -> 'man' | 'park' | 'dog' | 'telescope'
+V -> 'saw' | 'walked'
+P -> 'in' | 'with'
+""")
+
+#  Create a parser
+parser = nltk.ChartParser(grammar)
+
+#  Define the sentence
+sentence = "I saw a man in the park".split()
+
+# Parse the sentence and print all possible parse trees
+for tree in parser.parse(sentence):
+    print(tree)
+    tree.pretty_print()
+    tree.draw()  # Opens an interactive parse tree window (optional)
