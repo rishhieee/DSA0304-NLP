@@ -1,0 +1,30 @@
+import re
+
+def pos_tagging(text):
+    # Define a simple set of rules for POS tagging
+    rules = {
+        'NOUN': r'\b\w+(s|es|ing)?\b',
+        'VERB': r'\b\w+ed\b',
+        'ADJ': r'\b\w+ly\b',
+        'ADV': r'\b\w+ing\b',
+    }
+
+    # Tokenize the input text
+    tokens = text.split()
+    tagged = []
+
+    for token in tokens:
+        found = False
+        for tag, pattern in rules.items():
+            if re.fullmatch(pattern, token):
+                tagged.append((token, tag))
+                found = True
+                break
+        if not found:
+            tagged.append((token, 'UNKNOWN'))
+
+    return tagged
+
+# Example usage
+text = "The quick brown fox jumps over the lazy dog"
+print(pos_tagging(text))
