@@ -1,0 +1,98 @@
+# Simple Top-Down Recursive Descent Parser for Arithmetic Expressions
+
+tokens = []
+current_token_index = 0
+
+
+def get_token():
+    """Return the current token."""
+    if current_token_index < len(tokens):
+        return tokens[current_token_index]
+    return None
+
+
+def match(expected):
+    """Match the current token if it equals expected."""
+    global current_token_index
+    if get_token() == expected:
+        current_token_index += 1
+        return True
+    return False
+
+
+# Grammar:
+# E → T E'
+# E' → + T E' | ε
+# T → F T'
+# T' → * F T' | ε
+# F → ( E ) | id
+
+
+def E():
+    if T():
+        if E_prime():
+            return True
+    return False
+
+
+def E_prime():
+    if get_token() == '+':
+        match('+')
+        if T():
+            if E_prime():
+                return True
+        return False
+    # ε production
+    return True
+
+
+def T():
+    if F():
+        if T_prime():
+            return True
+    return False
+
+
+def T_prime():
+    if get_token() == '*':
+        match('*')
+        if F():
+            if T_prime():
+                return True
+        return False
+    # ε production
+    return True
+
+
+def F():
+    if get_token() == '(':
+        match('(')
+        if E():
+            if match(')'):
+                return True
+            else:
+                return False
+        else:
+            return False
+    elif get_token() == 'id':
+        match('id')
+        return True
+    return False
+
+
+def parse(input_string):
+    """Parse the given input string using the CFG."""
+    global tokens, current_token_index
+    tokens = input_string.split()
+    current_token_index = 0
+    if E() and current_token_index == len(tokens):
+        print("✅ Input string is accepted by the grammar.")
+    else:
+        print("❌ Input string is rejected by the grammar.")
+
+
+# Test examples
+parse("id + id * id")
+parse("( id + id ) * id")
+parse("id * ( id + id )")
+parse("id + * id")
