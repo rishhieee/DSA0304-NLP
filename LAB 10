@@ -1,0 +1,29 @@
+# Transformation-based Tagging
+
+def transform_tagging(words):
+    # Define transformation rules
+    rules = [
+        (lambda w: w.endswith('ing'), 'VBG'),  # Gerund
+        (lambda w: w.endswith('ed'), 'VBD'),   # Past tense
+        (lambda w: w.endswith('s'), 'VBZ'),    # Third person singular present
+        (lambda w: w[0].isupper(), 'NNP'),     # Proper noun
+        (lambda w: w in ['the', 'a', 'an'], 'DT'),  # Determiner
+        (lambda w: w.isalpha(), 'NN')          # Noun
+    ]
+    
+    tagged_words = []
+    
+    for word in words:
+        tag = 'NN'  # Default tag
+        for rule in rules:
+            if rule[0](word):
+                tag = rule[1]
+                break
+        tagged_words.append((word, tag))
+    
+    return tagged_words
+
+# Example usage
+words = ["running", "jumps", "The", "cat", "played", "a", "game"]
+tagged = transform_tagging(words)
+print(tagged)
