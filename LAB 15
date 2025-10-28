@@ -1,0 +1,33 @@
+# Program: Probabilistic Context-Free Grammar (PCFG) Parsing
+# Requires: nltk → pip install nltk
+
+import nltk
+from nltk import PCFG
+from nltk.parse import ViterbiParser
+
+# 1️⃣ Define a probabilistic grammar
+grammar = PCFG.fromstring("""
+S -> NP VP [1.0]
+NP -> Det N [0.6] | NP PP [0.4]
+VP -> V NP [0.5] | VP PP [0.5]
+PP -> P NP [1.0]
+Det -> 'a' [0.4] | 'the' [0.6]
+N -> 'man' [0.5] | 'park' [0.2] | 'telescope' [0.3]
+V -> 'saw' [1.0]
+P -> 'in' [0.6] | 'with' [0.4]
+""")
+
+# 2️⃣ Create a Viterbi parser (for most probable parse)
+parser = ViterbiParser(grammar)
+
+# 3️⃣ Define the sentence
+sentence = "the man saw a park with a telescope".split()
+
+# 4️⃣ Parse and show the most probable parse tree
+print("Parsing sentence:", " ".join(sentence))
+print("\n--- Most Probable Parse Tree ---\n")
+
+for tree in parser.parse(sentence):
+    print(tree)
+    tree.pretty_print()
+    tree.draw()  # opens a GUI tree (optional)
