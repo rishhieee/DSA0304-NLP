@@ -1,0 +1,17 @@
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+documents = [
+    "The sky is blue",
+    "The sun is bright",
+    "The sun in the sky is bright",
+    "We can see the shining sun, the bright sun"
+]
+
+vectorizer = TfidfVectorizer()
+tfidf_matrix = vectorizer.fit_transform(documents)
+feature_names = vectorizer.get_feature_names_out()
+
+for doc_index, doc in enumerate(documents):
+    print(f"\nDocument {doc_index+1}: {doc}")
+    for col in tfidf_matrix[doc_index, :].nonzero()[1]:
+        print(f"{feature_names[col]} -> {tfidf_matrix[doc_index, col]:.4f}")
