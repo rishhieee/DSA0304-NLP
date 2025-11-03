@@ -1,0 +1,18 @@
+from openai import OpenAI
+
+# Initialize client (make sure your API key is set in environment variables)
+client = OpenAI()
+
+# Prompt for GPT-3
+prompt = "Once upon a time in Chennai, a young student discovered a hidden library beneath the campus."
+
+# Generate text using GPT-3 (gpt-3.5-turbo-instruct behaves like the classic GPT-3 Davinci)
+response = client.completions.create(
+    model="gpt-3.5-turbo-instruct",
+    prompt=prompt,
+    max_tokens=100,
+    temperature=0.7
+)
+
+print("Generated Text:\n")
+print(response.choices[0].text.strip())
