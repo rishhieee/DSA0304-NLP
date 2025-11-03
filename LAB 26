@@ -1,0 +1,14 @@
+from transformers import pipeline
+
+# Load translation pipeline
+translator = pipeline("translation_en_to_fr", model="Helsinki-NLP/opus-mt-en-fr")
+
+# Input English text
+text = "The weather is very beautiful today. I want to go for a walk."
+
+# Perform translation
+result = translator(text, max_length=100)
+
+# Display translated text
+print("English:", text)
+print("French:", result[0]['translation_text'])
