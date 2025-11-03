@@ -1,0 +1,32 @@
+def recognize_dialog_act(sentence):
+    s = sentence.lower().strip()
+    
+    if any(word in s for word in ["hi", "hello", "hey", "good morning", "good evening"]):
+        return "Greeting"
+    elif any(word in s for word in ["thank", "thanks", "thank you"]):
+        return "Gratitude"
+    elif any(word in s for word in ["bye", "goodbye", "see you", "take care"]):
+        return "Farewell"
+    elif s.endswith("?"):
+        if any(word in s for word in ["can", "could", "will", "would", "please", "help"]):
+            return "Request"
+        else:
+            return "Question"
+    elif any(word in s for word in ["yes", "no", "sure", "okay", "fine"]):
+        return "Answer"
+    else:
+        return "Statement"
+
+
+dialog = [
+    "Hi, how are you?",
+    "Can you help me with my timetable?",
+    "Yes, sure!",
+    "I am doing great today.",
+    "Thank you so much!",
+    "Bye!"
+]
+
+print("Dialog Act Recognition:\n")
+for utt in dialog:
+    print(f"{utt} → {recognize_dialog_act(utt)}")
